@@ -72,7 +72,7 @@
     "analyze": "npm run clean && npm run build && source-map-explorer ./build/ckeditor.*",
     "clean": "rm -rf ./build",
     "build": "webpack --mode production",
-    "preversion": "npm run build; if [ -n \"$(git status src/ckeditor.js build/ --porcelain)\" ]; then git add -u src/ckeditor.js build/ && git commit -m 'Internal: Build.'; fi",
+    "preversion1111": "npm run build; if [ -n \"$(git status src/ckeditor.js build/ --porcelain)\" ]; then git add -u src/ckeditor.js build/ && git commit -m 'Internal: Build.'; fi",
     "prepare": "npm run clean && npm run build"
   },
   "dependencies": {}
