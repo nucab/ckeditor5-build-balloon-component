@@ -3,85 +3,98 @@
  * For licensing, see LICENSE.md.
  */
 
-'use strict';
+"use strict";
 
 /* eslint-env node */
 
-const path = require( 'path' );
-const webpack = require( 'webpack' );
-const { bundler, styles } = require( '@ckeditor/ckeditor5-dev-utils' );
-const CKEditorWebpackPlugin = require( '@ckeditor/ckeditor5-dev-webpack-plugin' );
-const UglifyJsWebpackPlugin = require( 'uglifyjs-webpack-plugin' );
+const path = require("path");
+const webpack = require("webpack");
+const { bundler, styles } = require("@ckeditor/ckeditor5-dev-utils");
+const CKEditorWebpackPlugin = require("@ckeditor/ckeditor5-dev-webpack-plugin");
+const UglifyJsWebpackPlugin = require("uglifyjs-webpack-plugin");
 
 module.exports = {
-	devtool: 'source-map',
-	performance: { hints: false },
+  devtool: "source-map",
+  performance: { hints: false },
 
-	entry: path.resolve( __dirname, 'src', 'ckeditor.js' ),
+  entry: path.resolve(__dirname, "src", "ckeditor.js"),
 
-	output: {
-		// The name under which the editor will be exported.
-		library: 'BalloonEditor',
+  output: {
+    // The name under which the editor will be exported.
+    library: "BalloonEditor",
 
-		path: path.resolve( __dirname, 'build' ),
-		filename: 'ckeditor.js',
-		libraryTarget: 'umd',
-		libraryExport: 'default'
-	},
+    path: path.resolve(__dirname, "build"),
+    filename: "ckeditor.js",
+    libraryTarget: "umd",
+    libraryExport: "default"
+  },
 
-	optimization: {
-		minimizer: [
-			new UglifyJsWebpackPlugin( {
-				sourceMap: true,
-				uglifyOptions: {
-					output: {
-						// Preserve CKEditor 5 license comments.
-						comments: /^!/
-					}
-				}
-			} )
-		]
-	},
+  optimization: {
+    minimizer: [
+      new UglifyJsWebpackPlugin({
+        sourceMap: true,
+        uglifyOptions: {
+          output: {
+            // Preserve CKEditor 5 license comments.
+            comments: /^!/
+          }
+        }
+      })
+    ]
+  },
 
-	plugins: [
-		new CKEditorWebpackPlugin( {
-			// UI language. Language codes follow the https://en.wikipedia.org/wiki/ISO_639-1 format.
-			// When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).
-			language: 'en',
-			additionalLanguages: 'all'
-		} ),
-		new webpack.BannerPlugin( {
-			banner: bundler.getLicenseBanner(),
-			raw: true
-		} )
-	],
+  plugins: [
+    new CKEditorWebpackPlugin({
+      // UI language. Language codes follow the https://en.wikipedia.org/wiki/ISO_639-1 format.
+      // When changing the built-in language, remember to also change it in the editor's configuration (src/ckeditor.js).
+      language: "en",
+      additionalLanguages: "all"
+    }),
+    new webpack.BannerPlugin({
+      banner: bundler.getLicenseBanner(),
+      raw: true
+    })
+  ],
 
-	module: {
-		rules: [
-			{
-				test: /\.svg$/,
-				use: [ 'raw-loader' ]
-			},
-			{
-				test: /\.css$/,
-				use: [
-					{
-						loader: 'style-loader',
-						options: {
-							singleton: true
-						}
-					},
-					{
-						loader: 'postcss-loader',
-						options: styles.getPostCssConfig( {
-							themeImporter: {
-								themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
-							},
-							minify: true
-						} )
-					},
-				]
-			}
-		]
-	}
+  module: {
+    rules: [
+      {
+        test: /\.svg$/,
+        use: ["raw-loader"]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: "style-loader",
+            options: {
+              singleton: true
+            }
+          },
+          {
+            loader: "postcss-loader",
+            options: styles.getPostCssConfig({
+              themeImporter: {
+                themePath: require.resolve("@ckeditor/ckeditor5-theme-lark")
+              },
+              minify: true
+            })
+          }
+        ]
+      }
+    ]
+  },
+  externals: {
+    "@ckeditor/ckeditor5-highlight": {
+      root: "@ckeditor/ckeditor5-highlight",
+      commonjs2: "@ckeditor/ckeditor5-highlight",
+      commonjs: "@ckeditor/ckeditor5-highlight",
+      amd: "@ckeditor/ckeditor5-highlight"
+    },
+    "@ckeditor/ckeditor5-image": "@ckeditor/ckeditor5-image",
+    "@ckeditor/ckeditor5-theme-lark": "@ckeditor/ckeditor5-theme-lark",
+    "@ckeditor/ckeditor5-upload": "@ckeditor/ckeditor5-upload",
+    "@ckeditor/ckeditor5-easy-image": "@ckeditor/ckeditor5-easy-image",
+    "@ckeditor/ckeditor5-block-quote": "@ckeditor/ckeditor5-block-quote"
+  }
 };
